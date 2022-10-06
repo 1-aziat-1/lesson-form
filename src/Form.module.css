@@ -1,0 +1,17 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.wrap {
+  position: relative;
+  padding-top: 24px;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 18px;
+}
