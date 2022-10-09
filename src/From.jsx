@@ -1,28 +1,74 @@
 import _ from './Form.module.css';
+import {useForm} from 'react-hook-form';
 
 export const Form = () => {
-  
-  return (
-    <form className={_.form}>
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
 
+  const onSubmit = (data) => {
+    console.log(data);
+  }; 
+  return (
+    <form className={_.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={_.wrap}>
         <label className={_.label} htmlFor='email'>Email</label>
-        <input className={_.input} type='text' id='email' name='email'/>
-        <p className={_.error}>Сообщение об ошибке</p>
+        <input
+        {...register('email',{
+          required: {
+            value: true,
+            message: 'Введите это поле',
+            },
+          pattern: {
+            value: /^.+@.+\..+$/,
+            message: 'Неверный email'
+          }
+        }
+        )}
+        className={_.input}
+        type='text'
+        id='email'
+        aria-invalid={!!errors.email}
+        />
+        {errors.email && <p className={_.error}>{errors.email.message}</p>}
       </div>
 
       <div className={_.wrap}>
         <label className={_.label} htmlFor='password'>Пароль</label>
-        <input className={_.input} type='password' id='password' name='password'/>
-        <p className={_.error}>Сообщение об ошибке</p>
+        <input
+        {...register('password',{
+          required: {
+            value: true,
+            message: 'Введите это поле',
+            },
+          pattern: {
+            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{6,}/,
+            message: 'Пароль небезопасный'
+          }
+        })
+        }
+        className={_.input}
+        type='password'
+        id='password'
+        aria-invalid={!!errors.password}
+        />
+        {errors.password && <p className={_.error}>{errors.password.message}</p>}
       </div>
 
       <div className={_.wrapCheckbox}>
-        <input className={_.checkbox} type='checkbox' id='save' name='save'/>
+        <input
+        {...register('save')}
+        className={_.checkbox}
+        type='checkbox'
+        id='save'
+        />
         <label className={_.labelCheckbox} htmlFor='save'>Сохранить пароль</label>
       </div>
 
       <button className={_.submit} type='submit'>Войти</button>
+
     </form>
   );
 };
